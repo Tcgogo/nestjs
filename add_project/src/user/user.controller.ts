@@ -9,6 +9,8 @@ import {
   HttpCode,
   Res,
   Req,
+  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -51,7 +53,27 @@ export class UserController {
 
   @Get(':id')
   @HttpCode(200)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(
+      '%c []-57',
+      'font-size:13px; background:#336699; color:#fff;',
+      typeof id,
+      id,
+    );
+
+    return { a: this.userService.findOne(+id), code: 500 };
+  }
+
+  @Get(['uuid', ':id'])
+  @HttpCode(200)
+  find2(@Param('id', ParseUUIDPipe) id: string) {
+    console.log(
+      '%c []-57',
+      'font-size:13px; background:#336699; color:#fff;',
+      typeof id,
+      id,
+    );
+
     return { a: this.userService.findOne(+id), code: 500 };
   }
 

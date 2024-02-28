@@ -6,6 +6,8 @@ import { globalMiddleware } from './middleware/global';
 import * as cors from 'cors';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { Response } from './common/response';
+import { HttpFilter } from './common/filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,12 +29,8 @@ async function bootstrap() {
       },
     }),
   );
-
-  console.log(
-    '%c []-31',
-    'font-size:13px; background:#336699; color:#fff;',
-    join(__dirname, 'images'),
-  );
+  app.useGlobalFilters(new HttpFilter());
+  app.useGlobalInterceptors(new Response());
   app.useStaticAssets(join(__dirname, 'images'), {
     prefix: '/tcgogo',
   });
